@@ -1,0 +1,38 @@
+services:
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+      - "8078:8078"
+    container_name: zookeeper
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: "yes"
+    networks:
+      - networks
+
+  zoonavigator:
+    image: elkozmon/zoonavigator:latest
+    environment:
+      - HTTP_PORT=9000
+    ports:
+      - "9000:9000"
+    container_name: zoonavigator
+    restart: unless-stopped
+    networks:
+      - networks
+
+  configuration:
+    build:
+      context: ./Configuration
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    container_name: configuration
+    networks:
+      - networks
+
+networks:
+  networks:
+    external: true
