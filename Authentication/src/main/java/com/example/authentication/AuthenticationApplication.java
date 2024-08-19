@@ -1,13 +1,11 @@
-package com.example.chatting;
+package com.example.authentication;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ChattingApplication {
-
+public class AuthenticationApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(ChattingApplication.class, args);
+		SpringApplication.run(AuthenticationApplication.class, args);
 	}
-
 }
