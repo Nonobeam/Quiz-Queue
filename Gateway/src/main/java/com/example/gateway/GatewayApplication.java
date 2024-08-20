@@ -1,9 +1,11 @@
 package com.example.gateway;
 
+import com.example.gateway.config.AuthValidationFilter;
 import com.example.gateway.config.UriConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.gateway.filter.factory.SecureHeadersGatewayFilterFactory.Config;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -20,18 +22,34 @@ public class GatewayApplication {
 	}
 
 	@Bean
-	public RouteLocator customRouteLocator(RouteLocatorBuilder builder, UriConfiguration uriConfiguration) {
+	public RouteLocator customRouteLocator(RouteLocatorBuilder builder, UriConfiguration uriConfiguration, AuthValidationFilter authValidationFilter) {
+		final String fallBack = "forward:/fallback";
+
 		String httpUriFlashCard = uriConfiguration.getHttp("flashcard");
+		String httpUriAuth = uriConfiguration.getHttp("auth");
+
+		Config authConfig = new Config();
 		return builder.routes()
 				.route(p -> p
-						.path("/box/study")
-						.uri(httpUriFlashCard + "/box/study"))
-				.route(p -> p
-						.host("*.circuitbreaker.com")
+						.path("/auth/register")
 						.filters(f -> f.circuitBreaker(config -> config
-								.setName("mycmd")
-								.setFallbackUri("forward:/fallback")))
-						.uri(httpUriFlashCard))
+								.setName("register")
+								.setFallbackUri(fallBack)))
+						.uri(httpUriAuth + "/auth/register"))
+				.route(p -> p
+						.path("/auth/login")
+						.filters(f -> f.circuitBreaker(config -> config
+								.setName("login")
+								.setFallbackUri(fallBack)))
+						.uri(httpUriAuth + "/auth/login"))
+				.route(p -> p
+						.path("/box/study")
+						.filters(f -> f
+								.circuitBreaker(config -> config
+										.setName("login")
+										.setFallbackUri(fallBack))
+								.filter(authValidationFilter.apply(authConfig)))
+						.uri(httpUriFlashCard + "/box/study"))
 				.build();
 	}
 

@@ -12,48 +12,24 @@ import static com.example.authentication.core.Permission.*;
 @Getter
 @RequiredArgsConstructor
 public enum Role {
-    CUSTOMER(
+    STUDENT(
             Set.of(
                     READ,
                     WRITE
             )
     ),
-    DENTIST(
+    TEACHER(
             Set.of(
                     READ,
                     WRITE
-            )
-    ),
-    STAFF(
-            Set.of(
-                    READ,
-                    WRITE,
-                    UPDATE,
-                    DELETE
-            )
-    ),
-    MANAGER(
-            Set.of(
-                    READ,
-                    WRITE,
-                    UPDATE,
-                    DELETE
             )
     ),
     ADMIN(
             Set.of(
                     READ,
                     WRITE,
-                    DELETE,
-                    UPDATE
-            )
-    ),
-    BOSS(
-            Set.of(
-                    READ,
-                    WRITE,
-                    DELETE,
-                    UPDATE
+                    UPDATE,
+                    DELETE
             )
     );
 

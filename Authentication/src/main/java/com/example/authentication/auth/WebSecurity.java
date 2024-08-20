@@ -23,7 +23,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class WebSecurity{
 
     private static final String[] WHITE_LIST_URL = {
-            "/api/v1/auth/**",
+            "/auth/**",
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",
@@ -34,11 +34,7 @@ public class WebSecurity{
             "/swagger-resources",
             "/swagger-resources/**",
             "/swagger-ui.html",
-            "/swagger-ui/index.html#/**",
-            "/user/forgotPassword",
-            "/user/resetPassword",
-            "/user/resetPassword/**",
-            "/api/v1/admin/test-api"
+            "/swagger-ui/index.html#/**"
     };
 
     private final JwtAuthenticationFilter jwtAuthFilter;

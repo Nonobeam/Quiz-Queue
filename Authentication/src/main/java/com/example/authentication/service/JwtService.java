@@ -21,7 +21,7 @@ import java.util.function.Function;
 public class JwtService {
     private static final Logger log = LoggerFactory.getLogger(JwtService.class);
     // Encryption key HS256
-    @Value("${application.security.jwt.secret-key.hs256}")
+    @Value("${application.security.jwt.key.hs256}")
     private String SECRET_KEY;
 
     @Value("${application.security.jwt.expiration}")
@@ -54,7 +54,7 @@ public class JwtService {
         try {
             return generateToken(new HashMap<>(), userDetails, expiration);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Error while generate token: {}", e.getMessage());
         }
 
         return null;
@@ -74,10 +74,10 @@ public class JwtService {
                     .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                     .compact();
         } catch (Exception e) {
-            log.error(e.getMessage());
+            e.printStackTrace();
+            log.error("Generate token failed: {}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
-
-        return null;
     }
 
     public String generateRefreshToken(
