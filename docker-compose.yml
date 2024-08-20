@@ -1,14 +1,34 @@
 services:
-  zookeeper:
+  zookeeper1:
     image: bitnami/zookeeper:latest
     ports:
       - "2181:2181"
       - "2888:2888"
       - "3888:3888"
       - "8078:8078"
-    container_name: zookeeper
+    container_name: zookeeper1
     environment:
       ALLOW_ANONYMOUS_LOGIN: "yes"
+    networks:
+      - networks
+
+  kafka:
+    image: bitnami/kafka:latest
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+      - "9999:9999"
+    container_name: kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181
+      KAFKA_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper1
     networks:
       - networks
 
