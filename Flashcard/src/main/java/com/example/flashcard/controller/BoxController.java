@@ -1,16 +1,14 @@
 package com.example.flashcard.controller;
 
-import com.example.flashcard.controller.utils.BoxManager;
-import com.example.flashcard.core.Card;
+import com.example.flashcard.core.BoxDTO;
+import com.example.flashcard.service.BoxService;
 import com.example.flashcard.service.CardService;
+import com.example.flashcard.service.KafkaService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,30 +19,15 @@ import java.util.Set;
 @AllArgsConstructor
 public class BoxController {
     private static final Logger log = LoggerFactory.getLogger(BoxController.class);
-    private final CardService cardService;
+    private final BoxService boxService;
+    private final KafkaService kafkaService;
 
-    @GetMapping("/study")
-    public ResponseEntity<Set<Card>> study(@RequestParam String category) {
-        try {
-            Set<Card> cardSet = cardService.getCardsByCategory(category);
-            log.info("Get all the cards by category {}", category);
-            return ResponseEntity.ok(cardSet);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().body(new HashSet<>());
-        }
-    }
-
-    @GetMapping("/study/random")
-    public ResponseEntity<Set<Card>> studyRandom(@RequestParam String category) {
-        try {
-            BoxManager boxManager = new BoxManager(cardService);
-            Set<Card> cardSet = boxManager.getRandomCards(category);
-            log.info("Get all random cards {}", category);
-            return ResponseEntity.ok(cardSet);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().body(new HashSet<>());
-        }
+    @PostMapping("/create")
+    public void createBox(@RequestBody BoxDTO boxDTO) {
+        kafkaService.sendMessage("box", "box", "author");
+        String content = "";
+        String author = kafkaService.processMessage(content);
+        boxDTO.setAuthor(author);
+        boxService.save(boxDTO.deserialize());
     }
 }

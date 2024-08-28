@@ -43,13 +43,21 @@ public class GatewayApplication {
 								.setFallbackUri(fallBack)))
 						.uri(httpUriAuth + "/auth/login"))
 				.route(p -> p
-						.path("/box/study")
+						.path("/card/study")
 						.filters(f -> f
 								.circuitBreaker(config -> config
 										.setName("login")
 										.setFallbackUri(fallBack))
 								.filter(authValidationFilter.apply(authConfig)))
-						.uri(httpUriFlashCard + "/box/study"))
+						.uri(httpUriFlashCard + "/card/study"))
+				.route(p -> p
+						.path("/box/create")
+						.filters(f -> f
+								.circuitBreaker(config -> config
+										.setName("box-create")
+										.setFallbackUri(fallBack))
+								.filter(authValidationFilter.apply(authConfig)))
+						.uri(httpUriFlashCard + "/box/create"))
 				.build();
 	}
 

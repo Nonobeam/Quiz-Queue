@@ -1,11 +1,12 @@
 package com.example.flashcard.service;
 
 import com.example.flashcard.core.Card;
-import com.example.flashcard.core.DTO.CardDTO;
+import com.example.flashcard.core.CardDTO;
 import com.example.flashcard.repository.CardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -25,5 +26,9 @@ public class CardService {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public List<Card> getAllCards() {
+        return cardRepo.findAll();
     }
 }

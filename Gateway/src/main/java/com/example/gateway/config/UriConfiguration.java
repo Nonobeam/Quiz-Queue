@@ -12,7 +12,6 @@ public class UriConfiguration {
     public UriConfiguration() {
         httpBin.put("test", "http://httpbin.org:80");
         httpBin.put("flashcard", "http://localhost:8081");
-        httpBin.put("auth", "http://localhost:8082");
     }
 
 

@@ -9,12 +9,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Account" />
         <module name="Configuration" />
-        <module name="Authentication" />
         <module name="Gateway" />
         <module name="Flashcard" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Authentication" target="21" />
       <module name="QuizQueue" target="1.5" />
     </bytecodeTargetLevel>
   </component>

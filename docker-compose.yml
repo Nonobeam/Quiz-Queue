@@ -43,6 +43,16 @@ services:
     networks:
       - networks
 
+  nginx:
+    image: nginx:stable-alpine-slim
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+    environment:
+      - NGINX_HOST=foobar.com
+      - NGINX_PORT=80
+
   configuration:
     build:
       context: ./Configuration

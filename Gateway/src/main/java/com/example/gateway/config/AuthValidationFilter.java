@@ -37,7 +37,7 @@ public class AuthValidationFilter implements GatewayFilterFactory {
                     .onErrorResume(e -> {
                         exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                         DataBuffer buffer = exchange.getResponse().bufferFactory().wrap("Unauthorized".getBytes());
-                        log.error("One error: {}", authHeader);
+                        log.error("Error: {}", authHeader);
                         return exchange.getResponse().writeWith(Mono.just(buffer));
                     });
         };
