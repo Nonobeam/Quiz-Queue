@@ -1,24 +1,123 @@
 services:
+  node1:
+    container_name: node1
+    image: mysql:9.0.1
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: QuizQueue
+    command: [ "mysqld",
+               "--server-id=1",
+               "--log-bin=mysql-bin-1.log",
+               "--enforce-gtid-consistency=ON",
+               "--log-slave-updates=ON",
+               "--gtid-mode=ON",
+               "--transaction-write-set-extraction=XXHASH64",
+               "--binlog-checksum=NONE",
+               "--master-info-repository=TABLE",
+               "--relay-log-info-repository=TABLE",
+               "--plugin-load=group_replication.so",
+               "--relay-log-recovery=ON",
+               "--loose-group-replication-start-on-boot=OFF",
+               "--loose-group-replication-group-name=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+               "--loose-group-replication-local-address=node1:6606",
+               "--loose-group-replication-group-seeds=node1:6606,node2:6606,node3:6606",
+               "--loose-group-replication-single-primary-mode=ON",
+               "--loose-group-replication-enforce-update-everywhere-checks=OFF" ]
+    networks:
+      - private
+    healthcheck:
+      test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
+      interval: 2s
+      retries: 20
+
+  node2:
+    container_name: node2
+    image: mysql:9.0.1
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: QuizQueue
+    command: [ "mysqld",
+               "--server-id=1",
+               "--log-bin=mysql-bin-1.log",
+               "--enforce-gtid-consistency=ON",
+               "--log-slave-updates=ON",
+               "--gtid-mode=ON",
+               "--transaction-write-set-extraction=XXHASH64",
+               "--binlog-checksum=NONE",
+               "--master-info-repository=TABLE",
+               "--relay-log-info-repository=TABLE",
+               "--plugin-load=group_replication.so",
+               "--relay-log-recovery=ON",
+               "--loose-group-replication-start-on-boot=OFF",
+               "--loose-group-replication-group-name=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+               "--loose-group-replication-local-address=node2:6606",
+               "--loose-group-replication-group-seeds=node1:6606,node2:6606,node3:6606",
+               "--loose-group-replication-single-primary-mode=ON",
+               "--loose-group-replication-enforce-update-everywhere-checks=OFF" ]
+    networks:
+      - private
+    healthcheck:
+      test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
+      interval: 2s
+      retries: 20
+
+  node3:
+    container_name: node3
+    image: mysql:9.0.1
+    ports:
+      - 3309:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: QuizQueue
+    command: [ "mysqld",
+               "--server-id=1",
+               "--log-bin=mysql-bin-1.log",
+               "--enforce-gtid-consistency=ON",
+               "--log-slave-updates=ON",
+               "--gtid-mode=ON",
+               "--transaction-write-set-extraction=XXHASH64",
+               "--binlog-checksum=NONE",
+               "--master-info-repository=TABLE",
+               "--relay-log-info-repository=TABLE",
+               "--plugin-load=group_replication.so",
+               "--relay-log-recovery=ON",
+               "--loose-group-replication-start-on-boot=OFF",
+               "--loose-group-replication-group-name=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+               "--loose-group-replication-local-address=node3:6606",
+               "--loose-group-replication-group-seeds=node1:6606,node2:6606,node3:6606",
+               "--loose-group-replication-single-primary-mode=ON",
+               "--loose-group-replication-enforce-update-everywhere-checks=OFF" ]
+    networks:
+      - private
+    healthcheck:
+      test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
+      interval: 2s
+      retries: 20
+
   zookeeper1:
+    container_name: zookeeper1
     image: bitnami/zookeeper:latest
     ports:
       - "2181:2181"
       - "2888:2888"
       - "3888:3888"
       - "8078:8078"
-    container_name: zookeeper1
     environment:
       ALLOW_ANONYMOUS_LOGIN: "yes"
     networks:
-      - networks
+      - private
 
   kafka:
+    container_name: kafka
     image: bitnami/kafka:latest
     ports:
       - "9092:9092"
       - "29092:29092"
       - "9999:9999"
-    container_name: kafka
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181
@@ -30,20 +129,21 @@ services:
     depends_on:
       - zookeeper1
     networks:
-      - networks
+      - private
 
   zoonavigator:
+    container_name: zoonavigator
     image: elkozmon/zoonavigator:latest
     environment:
       - HTTP_PORT=9000
     ports:
       - "9000:9000"
-    container_name: zoonavigator
     restart: unless-stopped
     networks:
-      - networks
+      - private
 
   nginx:
+    container_name: nginx
     image: nginx:stable-alpine-slim
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
@@ -54,15 +154,18 @@ services:
       - NGINX_PORT=80
 
   configuration:
+    container_name: configuration
     build:
       context: ./Configuration
       dockerfile: Dockerfile
     ports:
       - "8888:8888"
-    container_name: configuration
     networks:
-      - networks
+      - private
+      - public
 
 networks:
-  networks:
+  private:
+    external: true
+  public:
     external: true
