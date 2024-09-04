@@ -1,0 +1,1 @@
+Kibana for Elasticsearch ``http://localhost:5601/``

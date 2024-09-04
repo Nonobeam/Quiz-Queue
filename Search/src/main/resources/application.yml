@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: Elastic Search Flashcard
+  elasticsearch:
+    uris: jdbc:es://localhost:9200/
