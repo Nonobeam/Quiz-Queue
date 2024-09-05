@@ -1,0 +1,9 @@
+## Kibana configuration file
+elasticsearch.hosts: http://elasticsearch:9200
+monitoring.ui.container.elasticsearch.enabled: true
+
+# To activate Alerting vi
+elasticsearch.username: "kibana"
+elasticsearch.password: "123"
+xpack.security.encryptionKey: "hfjdnebgheurnthfcgnjsujebnwherkq"
+xpack.encryptedSavedObjects.encryptionKey: "hfjdnebgheurnthfcgnjsujebnwherkq"

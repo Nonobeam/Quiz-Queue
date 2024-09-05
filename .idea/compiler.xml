@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Account" />
+        <module name="Authorization-Server" />
         <module name="Configuration" />
         <module name="Flashcard" />
         <module name="Search" />
@@ -23,6 +24,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Account" options="-parameters" />
       <module name="Authentication" options="-parameters" />
+      <module name="Authorization-Server" options="-parameters" />
       <module name="Configuration" options="-parameters" />
       <module name="Flashcard" options="-parameters" />
       <module name="Gateway" options="-parameters" />
