@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: Notification
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: rabbitmq
+    password: 123
+
+server:
+  port: 8083

@@ -1,4 +1,14 @@
-# Education System
+# QuizQueue Project
+
+## Overview
+
+QuizQueue is a microservices-based application designed to manage quizzes, flashcards, notifications, and user accounts. The project is built using Spring Boot and Spring Cloud, leveraging various technologies such as OAuth2 for authentication, Kafka for messaging, and Elasticsearch for search capabilities.
+
+## Prerequisites
+
+- Java 21 or newer
+- Maven
+- Docker (for running services via Docker Compose)
 
 ## Architecture
 - Distributed system (Zookeeper, Kafka, Spring-cloud)
