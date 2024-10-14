@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: Flashcard
+
+  config:
+    import: optional:configserver:http://localhost:8888/
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: test
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: rabbitmq
+    password: 123
+
+  cloud:
+    zookeeper:
+      connect-string: localhost:2181
+    config:
+      name: global
+      profile: default
+      uri: http://localhost:8888/
+
+  data:
+    mongodb:
+      uri: ${db.uri}
+      database: ${db.database}
+
+server:
+  port: 8081
+
+logging:
+  level:
+    org:
+      springframework:
+        cloud.config: DEBUG
+#        security: DEBUG
+#        security.web.authentication: DEBUG
+#        security.authentication: DEBUG

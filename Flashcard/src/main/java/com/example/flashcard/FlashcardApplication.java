@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.example.flashcard", "com.example.authorization.config"})
+//@ComponentScan(basePackages = {"com.example.flashcard", "com.example.authorization.config"})
 public class FlashcardApplication {
 
 	public static void main(String[] args) {

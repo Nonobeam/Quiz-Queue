@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 public class TestNoti {
     private final NotificationService notificationService;
 
-    @Scheduled(fixedDelay = 2000)
-    public void autoNoti() {
-        notificationService.sendRabbitmqMessage();
-    }
+//    @Scheduled(fixedDelay = 2000)
+//    public void autoNoti() {
+//        notificationService.sendRabbitmqMessage();
+//    }
 }

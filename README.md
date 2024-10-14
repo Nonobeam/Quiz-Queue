@@ -26,6 +26,22 @@ QuizQueue is a microservices-based application designed to manage quizzes, flash
 ``` docker compose up -d ```
 - And use this to view the UI at <i>localhost:9000</i>  [Zookeeper-UI](http://localhost:9000)
 
+## All ports in used
+- Zookeeper: 2181
+- RabbitMQ: 5672
+- Gateway: 8080
+- Flashcard: 8081
+- Account: 8082
+- Notification: 8083
+- Configuration: 8888
+- Authen/Authorize: 9000
+- Elastic Search: 9200
+- Kafka: 9092
+
+
+
+
+
 ## Kafka Architecture
 
 ![Kafka](resources/images/KafkaClusterArchitecture.png)
