@@ -1,0 +1,17 @@
+[mysqld]
+socket = /var/run/mysqld/mysqld.sock
+lower_case_table_names = 2
+log_error=/var/log/mysql/error.log
+character-set-server=utf8
+collation-server=utf8_general_ci
+server-id=101
+binlog_format=ROW
+log-bin=/var/lib/mysql/mysql-bin.log
+bind-address = 0.0.0.0
+
+
+[mysql]
+default-character-set=utf8
+
+[client]
+default-character-set=utf8

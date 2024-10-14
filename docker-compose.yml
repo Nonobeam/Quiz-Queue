@@ -1,99 +1,40 @@
 services:
-  node1:
-    container_name: node1
+  master:
+    container_name: mysql-master
+    image: mysql:8.4.2
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql/master/conf.cnf:/etc/my.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: QuizQueue
+      MYSQL_USER: replication_user
+      MYSQL_PASSWORD: 123
+    command: [ "mysqld",
+               "--server-id=1",
+               "--log-bin=mysql-bin-1.log",
+               "--binlog-format=row",
+                "--mysql-native-password=ON"]
+
+  slave:
+    container_name: mysql-slave
     image: mysql:8.4.2
     ports:
       - 3307:3306
+    volumes:
+      - ./mysql/slave/conf.cnf:/etc/my.cnf
     environment:
       MYSQL_ROOT_PASSWORD: 123
       MYSQL_DATABASE: QuizQueue
+      MYSQL_USER: replication_user
+      MYSQL_PASSWORD: 123
     command: [ "mysqld",
-               "--server-id=1",
-               "--log-bin=mysql-bin-1.log",
-               "--enforce-gtid-consistency=ON",
-               "--log-slave-updates=ON",
-               "--gtid-mode=ON",
-               "--binlog-checksum=NONE",
-               "--master-info-repository=TABLE",
-               "--relay-log-info-repository=TABLE",
-               "--plugin-load=group_replication.so",
-               "--relay-log-recovery=ON",
-               "--loose-group-replication-start-on-boot=OFF",
-               "--loose-group-replication-group-name=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
-               "--loose-group-replication-local-address=node1:6606",
-               "--loose-group-replication-group-seeds=node1:6606,node2:6606,node3:6606",
-               "--loose-group-replication-single-primary-mode=ON",
-               "--loose-group-replication-enforce-update-everywhere-checks=OFF" ]
-    networks:
-      - private
-    healthcheck:
-      test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
-      interval: 2s
-      retries: 20
-
-  node2:
-    container_name: node2
-    image: mysql:8.4.2
-    ports:
-      - 3308:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: 123
-      MYSQL_DATABASE: QuizQueue
-    command: [ "mysqld",
-               "--server-id=1",
-               "--log-bin=mysql-bin-1.log",
-               "--enforce-gtid-consistency=ON",
-               "--log-slave-updates=ON",
-               "--gtid-mode=ON",
-               "--binlog-checksum=NONE",
-               "--master-info-repository=TABLE",
-               "--relay-log-info-repository=TABLE",
-               "--plugin-load=group_replication.so",
-               "--relay-log-recovery=ON",
-               "--loose-group-replication-start-on-boot=OFF",
-               "--loose-group-replication-group-name=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
-               "--loose-group-replication-local-address=node2:6606",
-               "--loose-group-replication-group-seeds=node1:6606,node2:6606,node3:6606",
-               "--loose-group-replication-single-primary-mode=ON",
-               "--loose-group-replication-enforce-update-everywhere-checks=OFF" ]
-    networks:
-      - private
-    healthcheck:
-      test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
-      interval: 2s
-      retries: 20
-
-  node3:
-    container_name: node3
-    image: mysql:8.4.2
-    ports:
-      - 3309:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: 123
-      MYSQL_DATABASE: QuizQueue
-    command: [ "mysqld",
-               "--server-id=1",
-               "--log-bin=mysql-bin-1.log",
-               "--enforce-gtid-consistency=ON",
-               "--log-slave-updates=ON",
-               "--gtid-mode=ON",
-               "--binlog-checksum=NONE",
-               "--master-info-repository=TABLE",
-               "--relay-log-info-repository=TABLE",
-               "--plugin-load=group_replication.so",
-               "--relay-log-recovery=ON",
-               "--loose-group-replication-start-on-boot=OFF",
-               "--loose-group-replication-group-name=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
-               "--loose-group-replication-local-address=node3:6606",
-               "--loose-group-replication-group-seeds=node1:6606,node2:6606,node3:6606",
-               "--loose-group-replication-single-primary-mode=ON",
-               "--loose-group-replication-enforce-update-everywhere-checks=OFF" ]
-    networks:
-      - private
-    healthcheck:
-      test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
-      interval: 2s
-      retries: 20
+               "--server-id=2",
+               "--log-bin=mysql-bin-2.log",
+               "--binlog-format=row"]
+    depends_on:
+      - master
 
   zookeeper1:
     container_name: zookeeper1
